@@ -1,3 +1,0 @@
-将该类与.properties文件关联起来
-@PropertySource(value = "classpath:config/exception-code.properties")
-看D:\mySorce\springboot笔记\day04\springbootcode2\src\main\java\com\whj\springbootcode\core\configuration\ExceptionCodeConfiguration.java

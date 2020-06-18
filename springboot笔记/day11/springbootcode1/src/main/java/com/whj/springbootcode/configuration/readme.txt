@@ -1,2 +1,0 @@
-CorsConfiguration.java
-项目一启动就将CorsConfiguration加入容器，解决了前端跨域问题
