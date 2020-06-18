@@ -1,0 +1,16 @@
+
+前端的请求方式与后端要求的不符的全局异常处理
+
+Optional 学习
+
+经典使用：
+  使用Optional的意义在于，让开发者强制进行判空操作***重点***
+  Optional<Theme> optionalTheme = this.themeService.findByName(themeName);
+  // orElseThrow：如果optionalTheme为null，就怎么样
+  return optionalTheme.orElseThrow(()-> new NotFoundException(30003));
+
+
+
+springbootcode01:
+Springboot的单元测试：
+在项目中的test目录下新建一个optional包进行Optional的测试：

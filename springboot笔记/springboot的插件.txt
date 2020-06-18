@@ -1,0 +1,50 @@
+lombok
+首先IDEA必须要下载lombok插件：springboot笔记\IDEA的使用\idea安装本地插件.png
+<!--lombok 自动生成getter和setter方法-->
+<dependency>
+	<groupId>org.projectlombok</groupId>
+	<artifactId>lombok</artifactId>
+	<version>1.18.12</version>
+	<scope>provided</scope>
+</dependency>
+
+使用方式：
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor //默认生成带所有参数的构造函数
+@NoArgsConstructor //默认生成无参构造函数
+//@Data 除了生成setter和getter外还会生成 equals,hashCode,toString这三个方法  少用！！！
+public class PeosonDTO {
+		@NonNull//在调用有参构造函数的时候，name是不能为null的
+    private String name;
+
+    private Integer age;
+}
+
+// ==== 以上情况下，只能使用无参构造函数和全参构造函数，想要使用部分参数的构造函数就用下面的方式进行:
+
+@Getter
+@Setter
+@RequiredArgsConstructor //与@NonNull注解配合使用，调用有参构造函数的时候，哪个参数有@NonNull注解，那么就必须传哪个参数
+@NoArgsConstructor //默认生成无参构造函数
+//@Data 除了生成setter和getter外还会生成 equals,hashCode,toString这三个方法  少用！！！
+public class PeosonDTO {
+		@NonNull//在调用有参构造函数的时候，name是不能为null的
+    private String name;
+
+    private Integer age;
+}
+
+// ==== lombok中@Builder注解的使用
+import lombok.*;
+@Builder
+//有了@Builder就不允许进行new了，因为该注解默认生成了一个私有的无参构造函数
+//如果实在想要new,那么就手动生成一个public的无参构造函数或者使用@NoArgsConstructor
+public class PeosonDTO {
+    private String name;
+    private Integer age;
+}
+PeosonDTO peosonDTO = PeosonDTO.builder().name("whj").age(12).build();//

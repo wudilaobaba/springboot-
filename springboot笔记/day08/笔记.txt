@@ -1,0 +1,133 @@
+无限级联分类
+  路径表示法：用一个完整的路径记录该节点的父节点，父父节点，...
+    追加字段path保存完整路径如:自定义协议
+      whjxx://localhost:8080/node1_id#name/node2_id#name/node3_id#name/...
+    当让也可以自定义协议：如井号是什么意思，星号是什么意思等
+
+
+springbootcode1: 根据分类category_id获取spu，即：根据"服装"获取到所有的"衣服spu"
+
+springbootcode2: 处理message模板的配置
+  STEP1. 在resource中创建ValidationMessages.properties
+  STEP2. 在controller中的路由参数上使用：
+    @Positive(message = "{id.positive}")
+  STEP3. 此时异常会进入到GlobalException中的"前端URL参数校验异常"中，
+    所以可以在GlobalException中的handleConstraintException方法中进行修改message的返回形式
+
+今后只要表中的字段类型在数据库中是json类型，那么返回前端的时候，一定要在模型中进行
+springbootcode3 或 springbootcode4 的处理：
+
+springbootcode3: Sku规格的出现,code是sku的唯一标识
+  一个category包含多个spu, 一个spu包含多个sku
+  相当于 category     spu           sku
+           服装       T恤       白色、S、耐克
+  sku中的specs字段是个JOSN字符串
+  新建Spec模型，用来表示sku中的spec字段，使得返回前端的spec是一个数组对象而不是单一的JSON字符串，
+  但是Spec并不是数据库中的一张表，我们不要使用@Entity注解
+
+  最终解决某一数据库JSON字段在类中的表示的方法：
+    单体：
+      数据库中的JSON转为前端的Map
+        STEP01.在Sku中增加一个字段test类型为Map<String,Object>，数据库中设置test为json单体类型，字段中不带[],只有一个{}
+        STEP02.定义好MapAndJson类
+        STEP03.在模型字段上加上@Convert(converter = MapAndJson.class)注解
+    列表：
+      数据库中的JSON转为前端的List
+        STEP01.在Sku中增加一个字段specs类型为List<Object>，数据库中设置specs为json列表类型，字段中带[],有多个{}
+        STEP02.定义好ListAndJson类
+    总结：数据库中的json字段不能为空，一定要有符合规则的值
+
+springbootcode4: 另一种实现json格式返回前端数据的实现方法：
+  STEP01.准备好GenericAndJson.class
+  STEP02.在模型中将需要进行数据转换的字段自定义get/set方法：代码如下：
+    LIST形式01：推荐方法01
+      private String specs; //数据库中的specs是JSON类型，这里要改为String
+      public List<Spec> getSpecs() {
+          if(this.specs == null){
+              return Collections.emptyList();//返回空List的方法
+          }
+          return GenericAndJson.josnToList(this.specs, new TypeReference<List<Spec>>(){});
+      }
+      public void setSpecs(List<Spec> specs) {
+          if(specs.isEmpty()){
+              return;
+          }
+          this.specs = GenericAndJson.ObjectToJson(specs);
+      }
+    LIST形式02：
+      private String specs; //数据库中的specs是JSON类型，这里要改为String
+      public List<Spec> getSpecs() {
+          if(this.specs == null){
+              return Collections.emptyList();//返回空List的方法
+          }
+          return GenericAndJson.josnToList(this.specs);
+      }
+      public void setSpecs(List<Spec> specs) {
+          if(specs.isEmpty()){
+              return;
+          }
+          this.specs = GenericAndJson.ObjectToJson(specs);
+      }
+
+    MAP形式(无模型)：
+      private String test;//数据库中的test是JSON类型，这里要改为String
+      public Map<String,Object> getTest(){
+          return GenericAndJson.josnToList(this.test, new TypeReference<Map<String, Object>>() {});
+      }
+      public void setTest(Map<String,Object> test){
+          this.test = GenericAndJson.ObjectToJson(test);
+      }
+    MAP形式(有模型)：
+      private String test;//数据库中的test是JSON类型，这里要改为String
+      public Map<String,Object> getTest(){
+          return GenericAndJson.josnToObject(this.test, Test.class);
+      }
+      public void setTest(Map<String,Object> test){
+          this.test = GenericAndJson.ObjectToJson(test);
+      }
+
+
+springbootcode5：最终的数据传递的解决方案：
+  MAP:
+    private String test; //数据库中的specs是JSON类型，这里要改为String
+    public Map<String,Object> getTest(){
+        return GenericAndJson.josnToObject(this.test, new TypeReference<Map<String, Object>>() {});
+    }
+    public void setTest(Map<String,Object> test){
+        this.test = GenericAndJson.ObjectToJson(test);
+    }
+
+  List:
+    private String specs; //数据库中的specs是JSON类型，这里要改为String
+    public List<Spec> getSpecs() {
+        if(this.specs == null){
+            return Collections.emptyList();//返回空List的方法
+        }
+        return GenericAndJson.josnToObject(this.specs, new TypeReference<List<Spec>>() {});
+    }
+
+    public void setSpecs(List<Spec> specs) {
+        if(specs.isEmpty()){
+            return;
+        }
+        this.specs = GenericAndJson.ObjectToJson(specs);
+    }
+
+springbootcode6：在模型类上添加@Where注解进行条件过滤
+  @Where(clause="delete_time is null")
+
+
+补充：
+  1.Collections.emptyList();//返回空List的方法
+Sku的规格设计(服务端)
+Spec是规格英文的简写
+涉及到以下两个实体：spec_key表 和 spec_value表
+Spec_Key规格名String ：颜色 尺码
+Spec_Value规格值: 红色 M
+
+Spec_Key Spec_Value 是一对多的关系
+ 颜色      红色...
+          spec_id进行二者关联
+
+
+对象的传输和存储的序列化问题：

@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: dev
+    # dev 就会读取application-dev.yml文件
+    # prod 就会读取application-dev.yml文件
+  jpa:
+    hibernate:
+      ddl-auto: update
+      # update #不会删除表
+      # create-drop #将表数据清空后再创建表 测试时比较有用
+      # none 禁止生成表
+
+
+#controller的根包
+whj:
+  api-package: com.whj.springbootcode.api

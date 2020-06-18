@@ -1,0 +1,96 @@
+Service层的出现
+
+层与层之间不一定要用interface进行引用
+
+=============  springbootcode1 包含了以下内容： ============
+
+注意:如果只有一个类，没有对应的接口，那么该类进行new和依赖注入都是可以的，但还是建议注入
+
+可视化数据库操作软件：mysql workbench
+
+.yml配置文件学习：
+  resource目录下新建一个application.yml文件来代替application.properties文件(删掉)
+
+环境配置文件:
+  resource/config/application-dev.yml   开发环境配置文件
+  resource/config/application-prod.yml  生产环境配置文件
+
+生产环境下，通常都是使用命令去启动项目：
+  STEP01.部署spring 看“打包springboot项目.jpg”
+    执行完成后，会在target目录中生成一个shopserver-0.0.1-SNAPSHOT.jar  超级jar包 uberjar(里面内置了一个tomcat服务器)
+    (打包以后的jar包里面内置了一个tomcat服务器，所以我们不用自己去安装tomcat)
+  STEP02.命令行运行项目: 进入uber jar的目录中执行：
+    java shopserver-0.0.1-SNAPSHOT.jar
+      或：
+    java -jar shopserver-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev (建议！！！)
+
+
+
+
+
+
+
+springbootcode2  JPA：
+
+创建数据库的三种方式：
+1.可视化管理工具(navicat(收费的), mysql workbench)
+2.手写sql语句，然后导入
+    使用命令行导入.sql文件：
+      mac电脑： source /Users/pc/Desktop/missyou-v1.sql
+      win电脑： source D:missyou-v1.sql;  最好将.sql文件放在D盘根目录下
+3.使用模型类JPA  推荐  JPA就是通过类来生成表
+  在model包中创建类，每一个就是数据库中的一张表，最终类名与表名相同
+  步骤：
+    STEP01. 在yml配置文件中进行配置数据库相关信息 dev和prod中都进行配置
+    STEP02. 在application.yml中配置jpa相关信息
+    STEP03. model包中添加类，就是一张表
+    STEP04. 项目一启动，就会生成step02中的表
+
+
+单项一对多：
+  springbootcode3：
+    处理一对多的JPA编写：Banner和BannerItem
+
+  springbootcode4： repository层的出现，用来操作数据库
+
+  springbootcode5： IDEA中打印SQL语句 application-dev.yml配置jpa项目
+    懒加载,默认懒加载
+      @OneToMany(fetch = FetchType.LAZY)//产生一对多的关系，写在"一"的一方
+    急加载
+      @OneToMany(fetch = FetchType.EAGER)//产生一对多的关系，写在"一"的一方
+
+双向一对多：@JoinColumn要打在多端
+  springbootcode6：
+    两边都有导航属性：
+    //====== 一端 ======：
+    //双向一对多 规则01
+    @OneToMany(mappedBy = "banner")//产生一对多的关系，写在"一"的一方
+    private List<BannerItem> items;
+
+    //====== 多端 ======：
+    //双向一对多 规则02
+    private Long bannerId; //外键表达出来
+    @ManyToOne//产生多对一的关系，写在"多"的一方
+    @JoinColumn(insertable = false, updatable = false, name="bannerId")//指明外键的名字(与外键名字一致)，写在"多"的一方
+    private Banner banner;
+
+    //双向一对多 规则02
+    //private Long bannerId; //外键不表达出来
+    @ManyToOne//产生多对一的关系，写在"多"的一方
+    @JoinColumn(name="bannerId")//指明外键的名字(与外键名字一致)，写在"多"的一方
+    private Banner banner;
+
+多对多关系配置：
+  springbootcode6中Theme与Spu：
+
+
+maven安装依赖的正确做法：
+  01. "maven安装依赖的正确做法.jpg"
+  02. pom.xml中添加镜像源:
+    <repositories>
+      <repository>
+        <id>alimaven</id>
+          <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+      </repository>
+    </repositories>

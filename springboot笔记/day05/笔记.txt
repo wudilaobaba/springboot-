@@ -1,0 +1,42 @@
+校验前端参数：
+  简单的get版本:springbootcode1
+    step01.在contriller类的最顶端写@Validated注解
+    step02.看下面的校验注解
+    @RequestMapping(value="/test5/{id1}", method={RequestMethod.GET,RequestMethod.POST}) //限制只能用GET和POST方式访问
+        public PeosonDTO test5(
+
+                @PathVariable(name="id1") //接收路由中斜线后面的参数
+                @Max(value = 20,message = "别超过20可以吗") //路由中斜线后面的参数值不能大于20
+                @Range(min=1,max = 10,message = "必须1~10")
+                Integer id,
+
+                @RequestParam   //接收路由中问号后面的参数
+                String name
+
+                //@RequestBody Map<String,Object> person //接收body体中的参数
+
+
+        ) {
+            PeosonDTO peosonDTO = PeosonDTO.builder().age(0).name("zjl").build();
+            return peosonDTO;
+        }
+
+
+    复杂的body体中的参数校验:springbootcode2
+      以及校验对象中的对象中的字段的方法
+
+
+    自定义校验：springbootcode3
+      STEP01.
+        通过自定义注解来实现
+        注解的使用：springbootcode\validators\PassWordEqual.java
+      STEP02.
+        编辑对应注解的关联类：PasswordValidator.class
+      STEP03.
+        将自定义注解和关联类关联在一起：在自定义注解中写： @Constraint(validatedBy = PasswordValidator.class)
+      STEP04.
+        哪个类需要进行自定义校验，那么就将该注解@PassWordEqual打在该类头上
+
+
+
+    springbootcode4 在全局异常类中，获取自定义参数校验的异常信息字符串

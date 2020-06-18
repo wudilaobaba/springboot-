@@ -1,0 +1,10 @@
+#生产环境配置文件
+server:
+  port: 8699
+
+spring:
+  datasource:
+    #数据库url                        数据库名                                      不指定的话，时间会与我们相差8个小时
+    url: jdbc:mysql://localhost:3306/whjshop?characterEncoding=utf8&serverTimezone=GMT%2B8
+    username: root
+    password: whjlyn938751

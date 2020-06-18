@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.6.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.whjpro</groupId>
+	<artifactId>shopserver</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>shopserver</name>
+	<description>Demo project for Spring Boot</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+	<!-- 配置镜像源 -->
+	<!--    <repositories>-->
+	<!--        <repository>-->
+	<!--            <id>alimaven</id>-->
+	<!--            <name>aliyun maven</name>-->
+	<!--            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>-->
+	<!--        </repository>-->
+	<!--    </repositories>-->
+
+	<dependencies>
+
+		<!--项目初始化的时候自动生成的-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!--项目初始化的时候自动生成的-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!--lombok 自动生成getter和setter方法-->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.12</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!--
+			jpa相关包 @Entity等注解   必须在yml配置文件中配置以下，然后才可使用
+			spring:
+			  datasource:
+				#数据库url                        数据库名                                      不指定的话，时间会与我们相差8个小时
+				url: jdbc:mysql://localhost:3306/whjshop?characterEncoding=utf8&serverTimezone=GMT%2B8
+				username: root
+				password: whjlyn938751
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<!--
+			jdbc驱动依赖   必须在yml配置文件中配置以下，然后才可使用
+			spring:
+			  jpa:
+				hibernate:
+				  ddl-auto: update #不会删除表
+				  # create-drop #将表数据清空后再创建表 测试时比较有用
+				  # none 禁止生成表
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+
+
+
+		<!--mysql驱动依赖-->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- 静态文件托管 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+		<!-- 未知包 但是有用 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
+
+
+
+
+		<!--<dependency>-->
+		<!--<groupId>org.springframework.boot</groupId>-->
+		<!--<artifactId>spring-boot-configuration-processor</artifactId>-->
+		<!--<optional>true</optional>-->
+		<!--</dependency>-->
+
+		<!--<dependency>-->
+		<!--<groupId>com.github.dozermapper</groupId>-->
+		<!--<artifactId>dozer-core</artifactId>-->
+		<!--<version>6.5.0</version>-->
+		<!--</dependency>-->
+		<!--&lt;!&ndash;JWT&ndash;&gt;-->
+		<!--<dependency>-->
+		<!--<groupId>com.auth0</groupId>-->
+		<!--<artifactId>java-jwt</artifactId>-->
+		<!--<version>3.8.1</version>-->
+		<!--</dependency>-->
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

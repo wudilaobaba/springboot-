@@ -1,0 +1,40 @@
+1.自动导包，一旦修改pom.xml文件就会自动入新改动的包
+  两种方式：
+    01.在项目中的pom.xml上右键，选择maven-选择reimport
+    02.看图“maven自动导包，根据pom的变化自动导包.png”
+
+2.修改JDK版本：
+  File - Project Structure
+
+3.修改maven版本：
+  Perfences - 输入"maven" - 看图：“修改maven版本.png”
+
+4.查看maven所有依赖的包
+  View - Tool Windows - Maven
+
+5.热重启服务端
+  Step01.
+    最好在项目一重启的时候就选择spring-dev-tools
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+  Step02.
+    看图：IDEA自动构建项目.png
+
+6.解决项目乱码问题：图“解项目的编码.png”
+
+7.IDEA下载插件：https://plugins.jetbrains.com/plugin/6317-lombok/versions
+  01.将想要的插件下载下来(.zip文件)，一定要与IDEA的版本号一致
+  02.看：“idea安装本地插件.png”，选中上一步下载好的.zip文件，然后重启IDEA即可
+  IDEA的lombok插件与以下配合使用：
+  <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.12</version>
+      <scope>provided</scope>
+  </dependency>
+
+8.快速生成main方法：输入psvm

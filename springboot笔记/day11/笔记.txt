@@ -1,0 +1,40 @@
+JWT令牌
+VIP用户与普通用户的权限(是否能访问API)，要进行分组
+分组与权限有关系
+用户必须属于一个分组
+
+
+C端的分组方案：
+  如用户级别是VIP,那么就定为大于16
+  如用户级别是普通,那么就定为2~16之间
+  对应的Controller中的API如果在2~16之间，那么只有普通用户可以访问
+  对应的Controller中的API如果大于16，那么只有VIP用户可以访问
+  所以，只有用户的级别大于等于API的级别，那么该用户才能访问该API
+
+
+
+用户登录
+  令牌有效期不能太长，建议2h
+   JWT令牌中可以写入用户信息，如UID或IP
+
+无感知二次登录
+  登录过期就要重新自动登录
+
+
+springbootcode1
+  GlobalExceptionAdvice.class
+    全局异常处理新增异常检测：前端POST方式值的时候，body体中的数据不是json格式
+  TokenController的编写
+  TokenGetDTO前端传值的dto类的编写，以及对该对象的自定义校验注解的编写
+  判断String字符串是不是空的方法：
+    String str = "xx";
+    boolean xx = StringUtils.isEmpty(s)
+  枚举的编写 LoginType 写在core/enumeration中
+
+  字段异常的模板处理：
+    ValidationMessages.properties中：
+      token.password = 当前输入的是${validatedValue}, 用户密码长度在{min}~{max}之间
+      //会自动识别min和max的自定义注解的参数值，以及当前被校验的字段的值：validatedValue
+    DTO中：
+      @TokenPassword(min=6,max=30,message="{token.password}")
+      private String password;
