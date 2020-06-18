@@ -1,9 +1,8 @@
 1.解压.zip文件
-2.在解压后springboot笔记中进行学习
+2.将解压后springboot笔记文件夹剪切到其他位置进行学习
 3.学习后:
-  git rm springboot笔记.zip
-  压缩 springboot笔记 文件夹
-  git rm -r springboot笔记
+  删除本地springboot-中的springboot笔记.zip
+  压缩学习完的springboot笔记，并剪切到springboot-中
   git add *
-  git commit -m "d"
+  git commit -m "a"
   git push origin master
